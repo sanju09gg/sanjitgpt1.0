@@ -1,0 +1,33 @@
+* {
+    color: #ececec;
+    font-family: Roboto, 'Open Sans', 'Helvetica Neue', sans-serif;
+    box-sizing: border-box;
+  }
+  
+  body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    background-color: #0d0d0d;
+  }
+  
+  .app {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+    background-color: #0d0d0d;
+    color: #ececec;
+    transition: all 0.3s ease;
+  }
+  
+  body.light .app {
+    background-color: #fefefe;
+    color: #111;
+  }
+  
+  @media (max-width: 900px) {
+    .app {
+      flex-direction: column;
+    }
+  }
+  
