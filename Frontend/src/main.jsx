@@ -27,7 +27,7 @@ function MyContextProvider({ children }) {
   useEffect(() => {
     const verifyUser = async () => {
       try {
-        const res = await fetch("http://localhost:4040/api/verify", {
+        const res = await fetch("https://sanjitgpt-backend-1.onrender.com/api/verify", {
           method: "GET",
           credentials: "include", // allows cookies
         });

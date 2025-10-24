@@ -21,7 +21,7 @@ function Sidebar() {
 
   const getAllThreads = async () => {
     try {
-      const res = await fetch(`http://localhost:4040/api/thread`, {
+      const res = await fetch(`https://sanjitgpt-backend-1.onrender.com/api/thread`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId: authorizedUser.id }),

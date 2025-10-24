@@ -22,7 +22,7 @@ function Signup() {
     e.preventDefault(); // prevent page reload
   
     try {
-      const res = await fetch("http://localhost:4040/api/signup", {
+      const res = await fetch("https://sanjitgpt-backend-1.onrender.com/api/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

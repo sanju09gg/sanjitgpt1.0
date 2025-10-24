@@ -51,7 +51,7 @@ function ChatWindow() {
   useEffect(() => {
     const verifyUser = async () => {
       try {
-        const res = await fetch("http://localhost:4040/api/verify", {
+        const res = await fetch(`https://sanjitgpt-backend-1.onrender.com/api/verify`, {
           method: "GET",
           credentials: "include",
         });
@@ -102,7 +102,7 @@ function ChatWindow() {
     setNewChat(false);
 
     try {
-      const response = await fetch("http://localhost:4040/api/chat", {
+      const response = await fetch("https://sanjitgpt-backend-1.onrender.com/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -137,7 +137,7 @@ function ChatWindow() {
 
   const handleLogout = async () => {
     try {
-      await fetch("http://localhost:4040/api/logout", {
+      await fetch("https://sanjitgpt-backend-1.onrender.com/api/logout", {
         method: "POST",
         credentials: "include",
       });

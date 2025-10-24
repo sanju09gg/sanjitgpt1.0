@@ -14,7 +14,7 @@ app.use(cookieParser());
 // ✅ Correct CORS config
 app.use(
   cors({
-    origin: "http://localhost:5173", // exact frontend origin
+    origin: "https://sanjitgpt.onrender.com", // exact frontend origin
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true, // allow cookies
   })
