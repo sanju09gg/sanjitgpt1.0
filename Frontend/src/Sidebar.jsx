@@ -60,7 +60,7 @@ function Sidebar() {
 
     try {
       const res = await fetch(
-        `http://localhost:4040/api/thread/${newThreadId}`
+        `https://sanjitgpt-backend-1.onrender.com/${newThreadId}`
       );
       const response = await res.json();
       setPrevChats(response);
@@ -74,7 +74,7 @@ function Sidebar() {
   const deleteThread = async (threadId) => {
     try {
       const response = await fetch(
-        `http://localhost:4040/api/thread/${threadId}`,
+        `https://sanjitgpt-backend-1.onrender.com/${threadId}`,
         { method: "DELETE" }
       );
       await response.json();
