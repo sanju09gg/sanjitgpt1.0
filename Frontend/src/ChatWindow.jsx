@@ -5,6 +5,7 @@ import { MyContext } from "./MyContext.jsx";
 import { PacmanLoader } from "react-spinners";
 import { Link, useNavigate } from "react-router-dom";
 
+
 function ChatWindow() {
   const {
     prompt,
@@ -95,12 +96,12 @@ function ChatWindow() {
 
   const getReply = async () => {
     if (!prompt.trim()) return;
-
+  
     setPrevChats((prev) => [...prev, { role: "user", content: prompt }]);
     setPrompt("");
     setLoading(true);
     setNewChat(false);
-
+  
     try {
       const response = await fetch("https://sanjitgpt-backend-1.onrender.com/api/chat", {
         method: "POST",
@@ -109,21 +110,24 @@ function ChatWindow() {
         body: JSON.stringify({
           message: prompt,
           threadId: currThreadId,
-          userId: authorizedUser.id,
+          userId: authorizedUser?.id,
           privateChat,
         }),
       });
+  
       const rep = await response.json();
       const r = rep.reply;
-
+  
       setPrevChats((prev) => [...prev, { role: "assistant", content: r }]);
       setReply(r);
-
+  
       const utterance = new SpeechSynthesisUtterance(r);
       utterance.lang = "en-US";
       window.speechSynthesis.speak(utterance);
+  
     } catch (err) {
-      console.error("Fetch Error:", err);
+      console.error("Frontend Error:", err);
+  
       setPrevChats((prev) => [
         ...prev,
         { role: "assistant", content: "Network error! Could not get a reply." },
@@ -132,6 +136,7 @@ function ChatWindow() {
       setLoading(false);
     }
   };
+  
 
   const handleProfileClick = () => setIsDroppedDownOpen(!isDroppedDownOpen);
 

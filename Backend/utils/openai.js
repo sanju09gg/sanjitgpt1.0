@@ -1,19 +1,31 @@
-import fetch from "node-fetch";
 import "dotenv/config";
 
+import { GoogleGenerativeAI } from "@google/generative-ai";
+
+const API_KEY =  process.env.GEMINI_KEY; // your key
+const genAI = new GoogleGenerativeAI(API_KEY);
+
 const getOpenAPIAIResponse = async (message) => {
-  const fallbackReplies = [
-    "Interesting, tell me more.",
-    "Can you explain that?",
-    "I see. What else?",
-    "Hmm, that’s curious.",
-    "Go on..."
-  ];
-  // Return a random reply
-  return fallbackReplies[Math.floor(Math.random() * fallbackReplies.length)];
+  try {
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+    const result = await model.generateContent(message);
+    return result.response.text();
+  } catch (error) {
+    console.error("SanjitGPT API error:", error);
+    // fallback replies if failure
+    const fallbackReplies = [
+      "Interesting, tell me more.",
+      "Can you explain that?",
+      "I see. What else?",
+      "Hmm, that’s curious.",
+      "Go on..."
+    ];
+    return fallbackReplies[Math.floor(Math.random() * fallbackReplies.length)];
+  }
 };
 
 export default getOpenAPIAIResponse;
+
 
 
 // import "dotenv/config";
