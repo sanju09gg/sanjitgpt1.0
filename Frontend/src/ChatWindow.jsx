@@ -12,6 +12,7 @@ function ChatWindow() {
     setPrompt,
     currThreadId,
     setNewChat,
+    prevChats,
     setPrevChats,
     setReply,
     loggedInUsername,
@@ -41,8 +42,8 @@ function ChatWindow() {
 
   useEffect(() => {
     scrollToBottom();
-  }, [loading, setPrevChats]);
-
+  }, [prevChats, loading]);
+  
   // Apply theme on mount
   useEffect(() => {
     document.body.className = changeTheme;
@@ -122,9 +123,9 @@ function ChatWindow() {
       setPrevChats((prev) => [...prev, { role: "assistant", content: r }]);
       setReply(r);
   
-      const utterance = new SpeechSynthesisUtterance(r);
-      utterance.lang = "en-US";
-      window.speechSynthesis.speak(utterance);
+      // const utterance = new SpeechSynthesisUtterance(r);
+      // utterance.lang = "en-US";
+      // window.speechSynthesis.speak(utterance);
   
     } catch (err) {
       console.error("Frontend Error:", err);
