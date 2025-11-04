@@ -112,7 +112,7 @@ function ChatWindow() {
         body: JSON.stringify({
           message: prompt,
           threadId: currThreadId,
-          userId: authorizedUser?._id,
+          userId: authorizedUser.id,
           privateChat,
         }),
       });

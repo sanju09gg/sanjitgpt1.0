@@ -202,14 +202,16 @@ router.post("/chat", async (req, res) => {
     // ✅ Get reply from Gemini (backend handles AI)
     const reply = await getOpenAPIAIResponse(message);
 
-    // ✅ If guest or private → No saving
+    // ✅ If guest or private → No saving to DB
     if (privateChat || !userId) {
       return res.json({ reply });
     }
 
-    const user = await User.findById(userId);
+    // ✅ Find user by your DB's userId field, not _id
+    const user = await User.findOne({ id: userId });
     if (!user) return res.status(404).json({ error: "User not found" });
 
+    // ✅ Find or create thread
     let thread = await Thread.findOne({ threadId });
 
     if (!thread) {
@@ -217,21 +219,24 @@ router.post("/chat", async (req, res) => {
         threadId,
         user: user._id,
         title: message,
-        message: [{ role: "user", content: message }],
+        message: [
+          { role: "user", content: message },
+          { role: "assistant", content: reply }
+        ],
       });
 
       await thread.save();
+
       user.threads.push(thread._id);
       await user.save();
     } else {
       thread.message.push({ role: "user", content: message });
+      thread.message.push({ role: "assistant", content: reply });
+      thread.updatedAt = new Date();
+      await thread.save();
     }
 
-    // ✅ Store assistant reply
-    thread.message.push({ role: "assistant", content: reply });
-    thread.updatedAt = new Date();
-    await thread.save();
-
+    // ✅ Send AI reply to frontend
     res.json({ reply });
 
   } catch (err) {
@@ -239,6 +244,7 @@ router.post("/chat", async (req, res) => {
     res.status(500).json({ error: "Something went wrong" });
   }
 });
+
 
 
 router.get("/verify", verifyToken, async (req, res) => {
