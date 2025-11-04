@@ -104,7 +104,7 @@ function ChatWindow() {
     setNewChat(false);
   
     try {
-      //Asking SanjitGPT
+      //Asking SanjitGPT API
       const response = await fetch("https://sanjitgpt-backend-1.onrender.com/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

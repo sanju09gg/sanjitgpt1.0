@@ -195,26 +195,21 @@ router.post("/chat", async (req, res) => {
   try {
     const { threadId, message, userId, privateChat } = req.body;
 
-    // ✅ Step 1: Validate message
     if (!message) {
       return res.status(400).json({ error: "Message is required!" });
     }
 
-    // ✅ Step 2: Always get assistant reply first
-    const assistantReply = await getOpenAPIAIResponse(message);
+    // ✅ Get reply from Gemini (backend handles AI)
+    const reply = await getOpenAPIAIResponse(message);
 
-    // ✅ Step 3: Handle private or guest chats — skip saving to DB
+    // ✅ If guest or private → No saving
     if (privateChat || !userId) {
-      return res.json({ reply: assistantReply });
+      return res.json({ reply });
     }
 
-    // ✅ Step 4: Only proceed with saving if user exists
     const user = await User.findById(userId);
-    if (!user) {
-      return res.status(404).json({ error: "User not found!" });
-    }
+    if (!user) return res.status(404).json({ error: "User not found" });
 
-    // ✅ Step 5: Find or create thread
     let thread = await Thread.findOne({ threadId });
 
     if (!thread) {
@@ -226,28 +221,25 @@ router.post("/chat", async (req, res) => {
       });
 
       await thread.save();
-
       user.threads.push(thread._id);
       await user.save();
     } else {
       thread.message.push({ role: "user", content: message });
     }
 
-    // ✅ Step 6: Append assistant message
-    thread.message.push({ role: "assistant", content: assistantReply });
+    // ✅ Store assistant reply
+    thread.message.push({ role: "assistant", content: reply });
     thread.updatedAt = new Date();
     await thread.save();
 
-    // ✅ Step 7: Send response
-    res.json({ reply: assistantReply });
+    res.json({ reply });
 
   } catch (err) {
-    console.error("Failed to update the thread:", err);
-    res
-      .status(500)
-      .json({ error: "Something went wrong :( (Check your OpenAI credits?)" });
+    console.error("Failed to update thread:", err);
+    res.status(500).json({ error: "Something went wrong" });
   }
 });
+
 
 router.get("/verify", verifyToken, async (req, res) => {
   try {
