@@ -24,7 +24,7 @@ function Sidebar() {
       const res = await fetch(`https://sanjitgpt-backend-1.onrender.com/api/thread`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId: authorizedUser.id }),
+        body: JSON.stringify({ userId: authorizedUser._id }),
       });
 
       const response = await res.json();
