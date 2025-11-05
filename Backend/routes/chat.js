@@ -208,7 +208,8 @@ router.post("/chat", async (req, res) => {
     }
 
     // ✅ Find user by your DB's userId field, not _id
-    const user = await User.findOne({ id: userId });
+    const user = await User.findById(userId);
+
     if (!user) return res.status(404).json({ error: "User not found" });
 
     // ✅ Find or create thread
