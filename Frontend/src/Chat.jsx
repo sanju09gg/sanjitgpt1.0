@@ -66,27 +66,30 @@ function Chat() {
             </div>
           )
         )}
-        {prevChats.length > 0 && (
-          <>
-            {latestReply === null ? (
-              <div className="gptDiv" key="typing">
-                <p className="gptMessage">
-                  <ReactMarkdown rehypePlugins={[RehypeHighlight]}>
-                    {prevChats[prevChats.length - 1].content}
-                  </ReactMarkdown>
-                </p>
-              </div>
-            ) : (
-              <div className="gptDiv" key="typing">
-                <p className="gptMessage">
-                  <ReactMarkdown rehypePlugins={[RehypeHighlight]}>
-                    {latestReply}
-                  </ReactMarkdown>
-                </p>
-              </div>
-            )}
-          </>
-        )}
+      {prevChats.length > 0 && (() => {
+  const last = prevChats[prevChats.length - 1];
+
+  // If last message is USER → print normally (no animation)
+  if (last.role === "user") {
+    return (
+      <div className="userDiv">
+        <p className="userMessage">{last.content}</p>
+      </div>
+    );
+  }
+
+  // If last message is ASSISTANT → animate it
+  return (
+    <div className="gptDiv">
+      <p className="gptMessage">
+        <ReactMarkdown rehypePlugins={[RehypeHighlight]}>
+          {latestReply !== null ? latestReply : last.content}
+        </ReactMarkdown>
+      </p>
+    </div>
+  );
+})()}
+
       </div>
     </>
   );
