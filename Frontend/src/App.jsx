@@ -5,10 +5,10 @@ import { MyContext } from "./MyContext.jsx";
 import ChatWindow from "./ChatWindow.jsx";
 
 function App() {
-    const {loggedInUsername,loading  } =
+    const {loggedInUsername  } =
     useContext(MyContext);
     
-  if (loading) return <div>Loading...</div>; // wait until verify finishes
+  // if (loading) return <div>Loading...</div>; // wait until verify finishes
 
   return (
     <div className="app">
