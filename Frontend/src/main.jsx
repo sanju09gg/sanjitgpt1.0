@@ -13,7 +13,7 @@ import Account from "./Account.jsx";
 function MyContextProvider({ children }) {
   const [authorizedUser, setAuthorizedUser] = useState({});
   const [loggedInUsername, setLoggedInUsername] = useState("");
-  const [loading, setLoading] = useState(true); // new: track verification status
+  const [loading, setLoading] = useState(true);
   const [prompt, setPrompt] = useState("");
   const [reply, setReply] = useState("");
   const [currThreadId, setCurrThreadId] = useState(uuidv1());
@@ -29,7 +29,7 @@ function MyContextProvider({ children }) {
       try {
         const res = await fetch("https://sanjitgpt-backend-1.onrender.com/api/verify", {
           method: "GET",
-          credentials: "include", // allows cookies
+          credentials: "include",
         });
         const data = await res.json();
         if (data.success) {
@@ -48,6 +48,26 @@ function MyContextProvider({ children }) {
     verifyUser();
   }, []);
 
+
+  const getAllThreads = async () => {
+    try {
+      const res = await fetch(`https://sanjitgpt-backend-1.onrender.com/api/thread`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId: authorizedUser.id }),
+      });
+
+      const response = await res.json();
+      const filteredData = response.map((thread) => ({
+        threadId: thread.threadId,
+        title: thread.title,
+      }));
+      setAllThreads(filteredData);
+    } catch (err) {
+      console.log("❌ Error fetching threads:", err);
+    }
+  };
+
   const providerValues = {
     loggedInUsername,
     setLoggedInUsername,
@@ -63,16 +83,17 @@ function MyContextProvider({ children }) {
     setPrevChats,
     allThreads,
     setAllThreads,
+    getAllThreads,
     authorizedUser,
     setAuthorizedUser,
     privateChat,
     setPrivateChat,
     showPrivatePopup,
     setShowPrivatePopup,
-    loading, // expose loading to components
+    loading,
   };
 
-  if (loading) return <div>Loading...</div>; // wait for verification
+  if (loading) return <div>Loading...</div>;
 
   return (
     <MyContext.Provider value={providerValues}>
@@ -81,7 +102,6 @@ function MyContextProvider({ children }) {
   );
 }
 
-// Wrap your entire router in the provider
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <MyContextProvider>

@@ -12,6 +12,7 @@ function Sidebar() {
     setNewChat,
     setPrompt,
     setReply,
+    getAllThreads,
     setCurrThreadId,
     authorizedUser,
     loggedInUsername,
@@ -19,25 +20,7 @@ function Sidebar() {
   } = useContext(MyContext);
   const [toggleSidebar, setToggleSidebar] = useState(true);
 
-  const getAllThreads = async () => {
-    try {
-      const res = await fetch(`https://sanjitgpt-backend-1.onrender.com/api/thread`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId: authorizedUser.id }),
-      });
-
-      const response = await res.json();
-      const filteredData = response.map((thread) => ({
-        threadId: thread.threadId,
-        title: thread.title,
-      }));
-      setAllThreads(filteredData);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
+ 
   useEffect(() => {
     getAllThreads();
   }, []);

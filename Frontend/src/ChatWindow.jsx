@@ -15,6 +15,7 @@ function ChatWindow() {
     prevChats,
     setPrevChats,
     setReply,
+    getAllThreads,
     loggedInUsername,
     setLoggedInUsername,
     authorizedUser,
@@ -98,13 +99,14 @@ function ChatWindow() {
   const getReply = async () => {
     if (!prompt.trim()) return;
   
+    const isFirstMessage = prevChats.length === 0; // detect first message
+  
     setPrevChats((prev) => [...prev, { role: "user", content: prompt }]);
     setPrompt("");
     setLoading(true);
     setNewChat(false);
   
     try {
-      //Asking SanjitGPT API
       const response = await fetch("https://sanjitgpt-backend-1.onrender.com/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -123,13 +125,12 @@ function ChatWindow() {
       setPrevChats((prev) => [...prev, { role: "assistant", content: r }]);
       setReply(r);
   
-      // const utterance = new SpeechSynthesisUtterance(r);
-      // utterance.lang = "en-US";
-      // window.speechSynthesis.speak(utterance);
+      if (isFirstMessage) {
+        getAllThreads(); // ✅ refresh sidebar when first msg creates a new thread
+      }
   
     } catch (err) {
       console.error("Frontend Error:", err);
-  
       setPrevChats((prev) => [
         ...prev,
         { role: "assistant", content: "Network error! Could not get a reply." },
@@ -138,8 +139,6 @@ function ChatWindow() {
       setLoading(false);
     }
   };
-  
-
   const handleProfileClick = () => setIsDroppedDownOpen(!isDroppedDownOpen);
 
   const handleLogout = async () => {
