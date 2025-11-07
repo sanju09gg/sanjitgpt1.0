@@ -272,7 +272,7 @@ function ChatWindow() {
           <Chat />
           <div ref={messagesEndRef}></div>
         </div>
-        <PacmanLoader loading={loading} color="#fff" />
+        <PacmanLoader loading={loading} color="#fff" className="loader-center"/>
       </div>
 
       {/* Input */}
