@@ -146,7 +146,7 @@ input:focus {
 .sayHello {
   height: 30px;
   margin: 5px;
-  font-size: 0.94rem;
+  font-size: 0.84rem;
   border-bottom: 1px solid #dedede18;
   color: #dedede;
 }
