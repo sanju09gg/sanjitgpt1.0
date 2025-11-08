@@ -79,7 +79,7 @@ function Sidebar() {
         <section className="sidebar">
           <div className="topbar">
             <img
-              src="src/assets/blacklogo.png"
+              src="/image.png"
               alt="gpt_logo"
               className="logo"
             />
