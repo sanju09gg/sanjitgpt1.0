@@ -16,11 +16,10 @@ function Sidebar() {
     setCurrThreadId,
     authorizedUser,
     loggedInUsername,
-    setPrivateChat
+    setPrivateChat,
   } = useContext(MyContext);
   const [toggleSidebar, setToggleSidebar] = useState(true);
 
- 
   useEffect(() => {
     getAllThreads();
   }, []);
@@ -77,56 +76,65 @@ function Sidebar() {
   return (
     <>
       {toggleSidebar ? (
-      <section className="sidebar">
-      <div className="topbar">
-        <img
-          src="src/assets/blacklogo.png"
-          alt="gpt_logo"
-          className="logo"
-        />
-        <i className="fa-solid fa-xmark" onClick={closeSidebar}></i>
-      </div>
-    
-      <button onClick={createNewChat}>
-        <span>New Chat</span>
-        <i className="fa-solid fa-pen-to-square"></i>
-      </button>
-    
+        <section className="sidebar">
+          <div className="topbar">
+            <img
+              src="src/assets/blacklogo.png"
+              alt="gpt_logo"
+              className="logo"
+            />
+            <i className="fa-solid fa-xmark" onClick={closeSidebar}></i>
+          </div>
 
-      <div className="threadContainer">
-        <ul className="threads">
-          {allThreads?.map((thread, idx) => (
-            <li
-              key={idx}
-              onClick={() => changeThread(thread.threadId)}
-              className={thread.threadId === currThreadId ? "highlighted" : ""}
-            >
-              {thread.title}
-              <i
-                className="fa-solid fa-trash"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  deleteThread(thread.threadId);
-                }}
-              ></i>
-            </li>
-          ))}
-        </ul>
-      </div>
-    
-  
-      <div className="account" onClick={closeSidebar}>
-        <div className="avatar">
-          {loggedInUsername ? loggedInUsername.slice(0, 2).toUpperCase() : "??"}
-        </div>
-        <div className="username">
-          {loggedInUsername
-            ? loggedInUsername.charAt(0).toUpperCase() + loggedInUsername.slice(1)
-            : ""}
-        </div>
-      </div>
-    </section>
-    
+          <button onClick={createNewChat}>
+            <span>New Chat</span>
+            <i className="fa-solid fa-pen-to-square"></i>
+          </button>
+
+          <div className="threadContainer">
+            <ul className="threads">
+              {allThreads?.map((thread, idx) => (
+                <li
+                  key={idx}
+                  onClick={() => changeThread(thread.threadId)}
+                  className={
+                    thread.threadId === currThreadId ? "highlighted" : ""
+                  }
+                >
+                  {(() => {
+                    const title =
+                      thread.title.length > 25
+                        ? thread.title.slice(0, 25) + "..."
+                        : thread.title;
+
+                    return title.charAt(0).toUpperCase() + title.slice(1);
+                  })()}
+                  <i
+                    className="fa-solid fa-trash"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      deleteThread(thread.threadId);
+                    }}
+                  ></i>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="account" onClick={closeSidebar}>
+            <div className="avatar">
+              {loggedInUsername
+                ? loggedInUsername.slice(0, 2).toUpperCase()
+                : "??"}
+            </div>
+            <div className="username">
+              {loggedInUsername
+                ? loggedInUsername.charAt(0).toUpperCase() +
+                  loggedInUsername.slice(1)
+                : ""}
+            </div>
+          </div>
+        </section>
       ) : (
         <div className="panel">
           <i className="fa-solid fa-table-columns" onClick={closeSidebar}></i>{" "}

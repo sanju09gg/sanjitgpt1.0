@@ -225,7 +225,7 @@ function ChatWindow() {
       {/* Dropdown */}
       {isDroppedDownOpen && (
         <div className="dropDown">
-          <div className="sayHello">Hello, {loggedInUsername}</div>
+          <div className="sayHello dropDownItem">Hello, {loggedInUsername}</div>
           <Link to="/sanjitgpt/account" style={{ textDecoration: "none" }}>
             <div className="dropDownItem">
               Account <i className="fa-regular fa-user"></i>
